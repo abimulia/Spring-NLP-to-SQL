@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spring-nlp-sql
+    version: 1.0.0
+  threads:
+    virtual:
+      enabled: true  # Java 24 virtual threads
+
+logging:
+  level:
+    root: INFO
+    com.abimulia.nlp: DEBUG
