@@ -7,6 +7,34 @@
 
 Change **free text(NLP)** request to --> safe **SQL SELECT**
 
+User give this query : "5 barang termahal yang ada di data?" and the application will create SQl that match with the user query.  
+So in this case the application will return following SQL
+```
+LLM raw response: {
+  "sql": "SELECT * FROM products ORDER BY price DESC LIMIT 5",
+  "params": {},
+  "explanation": ""
+}
+```
+and then execute the SQL after make sure only SELECT statement will be executed.
+
+### Run Application
+> mvn spring-boot:run
+
+<img width="859" height="732" alt="Image" src="https://github.com/user-attachments/assets/548435f8-8c99-4019-b599-32feef0bba06" />  
+
+### Test Application  
+
+using curl  
+> curl "http://localhost:8080/api/query?question=5 barang termahal yang ada di data?"  
+<img width="859" height="732" alt="Image" src="https://github.com/user-attachments/assets/12f9bee0-94ab-4ca0-9f73-20ddefadeca2" />
+
+or using browser   
+
+> http://localhost:8080/api/query?question="5 barang termahal yang ada di data?"
+
+<img width="821" height="832" alt="Image" src="https://github.com/user-attachments/assets/2092fe3f-4b10-4d91-85b3-929ea8b853b5" />    
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
