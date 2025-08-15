@@ -6,6 +6,8 @@ package com.abimulia.nlp.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author abimu
  *
@@ -15,10 +17,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * Copyright(c) 2025 Abi Mulia
  */
+@Slf4j
 public class JsonUtils {
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
 	public static <T> T read(String json, Class<T> type) {
+		log.debug("read() : json {}", json);
 		try {
 			return objectMapper.readValue(json, type);
 		} catch (Exception e) {

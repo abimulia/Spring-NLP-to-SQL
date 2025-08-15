@@ -37,7 +37,7 @@ public class SqlPlanner {
 	 * @param schema
 	 */
 	public SqlPlanner(ChatClient.Builder builder, SchemaCache schema) {
-		log.debug("SqlPlanner() : {}", builder, schema);
+		log.debug("SqlPlanner() : {}",  schema);
 		this.chatClient = builder.defaultSystem(SYSTEM).build();
 		this.schema = schema;
 	}
@@ -49,6 +49,7 @@ public class SqlPlanner {
 			- Never modify data; **SELECT only**. No DDL/DML.
 			- Prefer ANSI SQL. Parameterize literals using :named parameters when appropriate.
 			- If the question isn't answerable from the schema, explain why and propose the closest alternative.
+			- Always output SQL with numeric LIMIT values, not parameters.
 			
 			Output strictly as JSON with fields: sql(String), params (object), explanation(String).
 			""";
@@ -69,7 +70,10 @@ public class SqlPlanner {
 	            .create(Map.of(
 	                "schema", schema.schemaSummary(),
 	                "question", question
-	            )).getContents();
+	            )).getUserMessages()
+	            .get(0)
+	            .getText();
+	    
 	    log.debug("prompt: {}", prompt);
 	    // 2. Kirim prompt ke LLM
 	    String jsonOutput = chatClient.prompt()
@@ -78,8 +82,14 @@ public class SqlPlanner {
 	            .content();
 	    
 	    log.debug("LLM raw response: {}", jsonOutput);
+	    String cleanJson = jsonOutput
+	            .replaceAll("(?s)```json\\s*(.*?)\\s*```", "$1") // ambil isi di dalam blok ```json
+	            .trim();
+
+	    log.debug("Cleaned JSON: {}", cleanJson);
+	    
 	    // 3. Parsing JSON ke SqlPlan
-	    return JsonUtils.read(jsonOutput, SqlPlan.class);
+	    return JsonUtils.read(cleanJson, SqlPlan.class);
 
 	
 	}
