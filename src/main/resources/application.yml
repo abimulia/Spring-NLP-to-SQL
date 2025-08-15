@@ -7,9 +7,13 @@ spring:
       enabled: true  # Java 24 virtual threads
   sql:
     init:
-      mode: always
+      mode: never
       schema-locations: classpath:db/01_schema.sql
       data-locations: classpath:db/02_seed.sql
+  ai:
+    ollama:
+      chat:
+        model: llama3.1
 
 logging:
   level:
