@@ -5,6 +5,11 @@ spring:
   threads:
     virtual:
       enabled: true  # Java 24 virtual threads
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/01_schema.sql
+      data-locations: classpath:db/02_seed.sql
 
 logging:
   level:
